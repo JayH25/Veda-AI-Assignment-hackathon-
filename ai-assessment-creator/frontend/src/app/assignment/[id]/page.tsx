@@ -99,6 +99,7 @@ export default function AssignmentOutput() {
               Print Paper
             </button>
             <button 
+              onClick={() => window.print()}
               className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-primary/20 active:scale-95 transition-all"
             >
               <Download size={16} />
