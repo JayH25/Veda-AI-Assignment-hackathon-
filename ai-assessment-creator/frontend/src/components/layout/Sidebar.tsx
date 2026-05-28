@@ -15,74 +15,71 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 h-screen border-r border-gray-200 bg-white flex flex-col justify-between">
+    <div className="w-64 h-screen border-r border-border bg-card flex flex-col justify-between transition-all duration-300">
       <div>
-        <div className="h-16 flex items-center px-6 border-b border-gray-100">
-          <div className="flex items-center gap-2 font-bold text-xl text-gray-800">
-            <div className="w-8 h-8 bg-orange-600 rounded-md flex items-center justify-center text-white">V</div>
+        <div className="h-20 flex items-center px-6 border-b border-border">
+          <div className="flex items-center gap-2 font-black text-2xl text-foreground tracking-tighter">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+              V
+            </div>
             VedaAI
           </div>
         </div>
+        
         <div className="p-4">
-          {/* Primary Action Button */}
-        <div className="p-4">
-          <Link href="/create" className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+          <Link href="/" className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20 active:scale-[0.98]">
             <Plus size={18} />
-            Create Assignment
+            New Assessment
           </Link>
         </div>
-        </div>
+
         {/* Navigation */}
-        <nav className="flex-1 px-4 space-y-1 mt-4">
+        <nav className="flex-1 px-3 space-y-1.5 mt-2">
           
-          {/* Real Link for Home */}
-          <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium">
-            <Home size={18} /> Home
+          <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all text-sm font-bold group">
+            <Home size={18} className="group-hover:text-primary transition-colors" /> Home
           </Link>
 
-          {/* Fake Button for My Groups */}
           <button 
             onClick={() => toast('👥 My Groups is coming soon in V2!')}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all text-sm font-bold group"
           >
-            <Users size={18} /> My Groups
+            <Users size={18} className="group-hover:text-primary transition-colors" /> My Groups
           </button>
 
-          {/* Real Link for Assignments (Active State) */}
-          <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-100 text-gray-900 transition-colors text-sm font-medium">
+          <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-primary/10 text-primary transition-all text-sm font-black border border-primary/10">
             <FileText size={18} /> Assignments
           </Link>
 
-          {/* Fake Button for AI Toolkit */}
           <button 
             onClick={() => toast('✨ AI Toolkit is coming soon in V2!')}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all text-sm font-bold group"
           >
-            <Wrench size={18} /> AI Teacher's Toolkit
+            <Wrench size={18} className="group-hover:text-primary transition-colors" /> AI Toolkit
           </button>
 
-          {/* Fake Button for My Library */}
           <button 
             onClick={() => toast('📚 My Library is coming soon in V2!')}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all text-sm font-bold group"
           >
-            <BookOpen size={18} /> My Library
+            <BookOpen size={18} className="group-hover:text-primary transition-colors" /> My Library
           </button>
 
         </nav>
       </div>
-      <div className="p-4 border-t border-gray-100 space-y-2">
-        <Link href="#" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 rounded-lg hover:bg-gray-50 transition-colors">
+
+      <div className="p-4 border-t border-border space-y-3">
+        <Link href="#" className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-muted-foreground hover:text-foreground rounded-2xl hover:bg-secondary transition-all">
           <Settings size={18} />
           Settings
         </Link>
-        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl mt-2 cursor-pointer hover:bg-gray-100 transition-colors">
-          <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center font-bold text-orange-600 border border-orange-200">
+        <div className="flex items-center gap-3 p-4 bg-secondary rounded-2xl cursor-pointer hover:shadow-md transition-all border border-border group">
+          <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center font-black text-primary border border-primary/20 group-hover:scale-110 transition-transform">
             DP
           </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900 leading-tight">Delhi Public School</p>
-            <p className="text-xs text-gray-500">Bokaro Steel City</p>
+          <div className="overflow-hidden">
+            <p className="text-sm font-black text-foreground truncate leading-none mb-1">Delhi Public School</p>
+            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest truncate">Bokaro Steel City</p>
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import { useState } from 'react';
 export default function CreateAssignment() {
   const { 
     dueDate, setDueDate, 
+    subject, setSubject,
     questionConfigs, addQuestionConfig, removeQuestionConfig, updateQuestionConfig,
     additionalInfo, setAdditionalInfo,
     getTotalQuestions, getTotalMarks 
@@ -35,7 +36,8 @@ export default function CreateAssignment() {
 
     try {
       const payload = {
-        dueDate, // This will now safely have a real date string
+        dueDate, 
+        subject,
         questions: questionConfigs.map(q => ({
           type: q.type,
           count: q.count,
@@ -60,131 +62,162 @@ export default function CreateAssignment() {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto animate-in fade-in duration-300">
+    <div className="p-8 max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
       
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-5 h-5 flex items-center justify-center bg-green-500 rounded-full text-white text-xs font-bold">✓</div>
-        <div>
-          <h1 className="text-lg font-bold text-gray-900 leading-tight">Create Assignment</h1>
-          <p className="text-xs text-gray-500">Set up a new assignment for your students</p>
-        </div>
+      {/* Hero Section */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-extrabold text-foreground tracking-tight sm:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
+          Create Smart Assessments
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Design professional question papers in minutes. Customize levels, marks, and let our AI handle the rest.
+        </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-        <h2 className="text-md font-bold text-gray-900 mb-1">Assignment Details</h2>
-        <p className="text-xs text-gray-500 mb-6">Basic information about your assignment</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Column: Configuration */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-card rounded-3xl border border-border p-8 shadow-xl shadow-primary/5 transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-2xl text-primary font-bold">1</div>
+              <h2 className="text-xl font-bold text-foreground">Configure Questions</h2>
+            </div>
 
-        {/* Upload Area */}
-        <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors cursor-pointer mb-8">
-          <UploadCloud className="text-gray-400 mb-3" size={32} />
-          <p className="text-sm font-semibold text-gray-700">Choose a file or drag & drop it here</p>
-          <p className="text-xs text-gray-400 mt-1 mb-4">JPEG, PNG, upto 10MB</p>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 shadow-sm">
-            Browse Files
-          </button>
-          <p className="text-xs text-gray-400 mt-4">Upload images of your preferred document/image</p>
-        </div>
-
-        {/* Due Date */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Due Date</label>
-          <div className="relative w-full md:w-1/2">
-            <input 
-              type="date" 
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full pl-4 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
-            />
-            <Calendar className="absolute right-3 top-2.5 text-gray-400" size={18} />
-          </div>
-        </div>
-
-        {/* Question Types Configuration */}
-        <div className="mb-6">
-          <div className="flex text-sm font-semibold text-gray-700 mb-2">
-            <div className="flex-1">Question Type</div>
-            <div className="w-32 text-center">No. of Questions</div>
-            <div className="w-32 text-center">Marks</div>
-            <div className="w-10"></div>
-          </div>
-
-          <div className="space-y-3">
-            {questionConfigs.map((q) => (
-              <div key={q.id} className="flex items-center gap-4">
-                <select 
-                  value={q.type}
-                  onChange={(e) => updateQuestionConfig(q.id, 'type', e.target.value)}
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none"
-                >
-                  {QUESTION_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
-                </select>
-
-                <div className="w-32 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5">
-                  <button onClick={() => updateQuestionConfig(q.id, 'count', q.count - 1)} className="p-1 hover:bg-gray-200 rounded text-gray-500"><Minus size={14} /></button>
-                  <span className="text-sm font-medium w-8 text-center">{q.count}</span>
-                  <button onClick={() => updateQuestionConfig(q.id, 'count', q.count + 1)} className="p-1 hover:bg-gray-200 rounded text-gray-500"><Plus size={14} /></button>
-                </div>
-
-                <div className="w-32 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5">
-                  <button onClick={() => updateQuestionConfig(q.id, 'marks', q.marks - 1)} className="p-1 hover:bg-gray-200 rounded text-gray-500"><Minus size={14} /></button>
-                  <span className="text-sm font-medium w-8 text-center">{q.marks}</span>
-                  <button onClick={() => updateQuestionConfig(q.id, 'marks', q.marks + 1)} className="p-1 hover:bg-gray-200 rounded text-gray-500"><Plus size={14} /></button>
-                </div>
-
-                <button onClick={() => removeQuestionConfig(q.id)} className="w-10 flex justify-center text-gray-400 hover:text-red-500 transition-colors">
-                  <X size={18} />
-                </button>
+            {/* Question Types Configuration */}
+            <div className="mb-8">
+              <div className="hidden md:flex text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 px-2">
+                <div className="flex-1">Question Type</div>
+                <div className="w-32 text-center">Quantity</div>
+                <div className="w-32 text-center">Marks/Q</div>
+                <div className="w-10"></div>
               </div>
-            ))}
+
+              <div className="space-y-4">
+                {questionConfigs.map((q) => (
+                  <div key={q.id} className="group flex flex-col md:flex-row items-center gap-4 bg-secondary/30 p-4 md:p-2 rounded-2xl border border-transparent hover:border-primary/20 transition-all duration-300">
+                    <select 
+                      value={q.type}
+                      onChange={(e) => updateQuestionConfig(q.id, 'type', e.target.value)}
+                      className="w-full md:flex-1 bg-card border border-border rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    >
+                      {QUESTION_TYPES.map(type => <option key={type} value={type} className="bg-card text-foreground">{type}</option>)}
+                    </select>
+
+                    <div className="w-full md:w-32 flex items-center justify-between bg-card border border-border rounded-xl px-3 py-2">
+                      <button onClick={() => updateQuestionConfig(q.id, 'count', q.count - 1)} className="p-1 hover:bg-secondary rounded-lg text-muted-foreground transition-all"><Minus size={16} /></button>
+                      <span className="text-sm font-bold text-foreground">{q.count}</span>
+                      <button onClick={() => updateQuestionConfig(q.id, 'count', q.count + 1)} className="p-1 hover:bg-secondary rounded-lg text-muted-foreground transition-all"><Plus size={16} /></button>
+                    </div>
+
+                    <div className="w-full md:w-32 flex items-center justify-between bg-card border border-border rounded-xl px-3 py-2">
+                      <button onClick={() => updateQuestionConfig(q.id, 'marks', q.marks - 1)} className="p-1 hover:bg-secondary rounded-lg text-muted-foreground transition-all"><Minus size={16} /></button>
+                      <span className="text-sm font-bold text-foreground">{q.marks}</span>
+                      <button onClick={() => updateQuestionConfig(q.id, 'marks', q.marks + 1)} className="p-1 hover:bg-secondary rounded-lg text-muted-foreground transition-all"><Plus size={16} /></button>
+                    </div>
+
+                    <button onClick={() => removeQuestionConfig(q.id)} className="hidden md:flex w-10 justify-center text-muted-foreground hover:text-red-500 transition-colors">
+                      <X size={20} />
+                    </button>
+                    <button onClick={() => removeQuestionConfig(q.id)} className="md:hidden w-full py-2 text-xs font-semibold text-red-500 bg-red-500/10 rounded-xl">
+                      Remove Section
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <button 
+                onClick={addQuestionConfig} 
+                className="mt-6 w-full flex items-center justify-center gap-2 text-sm font-bold text-primary hover:bg-primary/5 bg-transparent border-2 border-dashed border-primary/20 py-4 rounded-2xl transition-all"
+              >
+                <Plus size={18} /> Add New Section
+              </button>
+            </div>
           </div>
 
-          <button onClick={addQuestionConfig} className="mt-4 flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-100 px-4 py-2 rounded-lg transition-colors">
-            <Plus size={16} /> Add Question Type
-          </button>
-        </div>
-
-        {/* Totals Summary */}
-        <div className="flex flex-col items-end text-sm font-semibold text-gray-700 mb-8 border-b border-gray-100 pb-6">
-          <p>Total Questions : {getTotalQuestions()}</p>
-          <p>Total Marks : {getTotalMarks()}</p>
-        </div>
-
-        {/* Additional Information */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Additional Information (For better output)</label>
-          <div className="relative">
-            <textarea 
-              value={additionalInfo}
-              onChange={(e) => setAdditionalInfo(e.target.value)}
-              placeholder="e.g Generate a question paper for 3 hour exam duration..."
-              className="w-full bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 min-h-[100px] resize-y"
-            />
+          <div className="bg-card rounded-3xl border border-border p-8 shadow-xl shadow-primary/5 transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-2xl text-primary font-bold">2</div>
+              <h2 className="text-xl font-bold text-foreground">Advanced Context</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <label className="block text-sm font-bold text-foreground px-1">Specific Instructions</label>
+              <textarea 
+                value={additionalInfo}
+                onChange={(e) => setAdditionalInfo(e.target.value)}
+                placeholder="Ex: Focus on photosynthesis, include 2 diagram-based questions, keep language simple for 5th grade..."
+                className="w-full bg-secondary/30 border border-border rounded-2xl px-5 py-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground resize-none min-h-[120px] transition-all"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Footer Navigation */}
-        <div className="flex justify-between items-center mt-8 border-t border-gray-100 pt-6">
-          <Link href="/" className="px-6 py-2.5 rounded-full border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors text-sm">
-            ← Previous
-          </Link>
-          <button 
-            onClick={handleSubmit}
-            disabled={isGenerating}
-            className={`px-6 py-2.5 rounded-full text-white font-medium transition-colors text-sm flex items-center gap-2 ${
-              isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#111111] hover:bg-gray-800'
-            }`}
-          >
-            {isGenerating ? 'Generating AI Paper...' : 'Next →'}
-          </button>
-          {/* <button 
-            onClick={handleSubmit}
-            disabled={isGenerating}
-            className={`px-6 py-2.5 rounded-full text-white font-medium transition-colors text-sm flex items-center gap-2 ${
-              isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#111111] hover:bg-gray-800'
-            }`}
-          >
-            {isGenerating ? 'Generating AI Paper...' : 'Next →'}
-          </button> */}
+        {/* Right Column: Settings & Summary */}
+        <div className="space-y-6">
+          <div className="bg-card rounded-3xl border border-border p-8 shadow-xl shadow-primary/5 sticky top-24">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-2xl text-primary font-bold">3</div>
+              <h2 className="text-xl font-bold text-foreground">Final Prep</h2>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-bold text-foreground mb-2 px-1">Subject</label>
+                <input 
+                  type="text" 
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder="Ex: Science, Biology..."
+                  className="w-full px-5 py-4 bg-secondary/30 border border-border rounded-2xl text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-foreground mb-2 px-1">Submission Deadline</label>
+                <div className="relative group">
+                  <input 
+                    type="date" 
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                    className="w-full pl-5 pr-12 py-4 bg-secondary/30 border border-border rounded-2xl text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all cursor-pointer"
+                  />
+                  <Calendar className="absolute right-4 top-4 text-primary group-hover:scale-110 transition-transform" size={20} />
+                </div>
+              </div>
+
+              <div className="bg-primary/5 rounded-2xl p-6 border border-primary/10">
+                <h3 className="text-xs font-bold text-primary uppercase tracking-widest mb-4">Paper Statistics</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center text-sm font-medium text-foreground">
+                    <span>Total Questions</span>
+                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-lg">{getTotalQuestions()}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm font-medium text-foreground">
+                    <span>Maximum Marks</span>
+                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-lg">{getTotalMarks()} pts</span>
+                  </div>
+                </div>
+              </div>
+
+              <button 
+                onClick={handleSubmit}
+                disabled={isGenerating}
+                className={`w-full py-5 rounded-2xl text-base font-black text-white transition-all shadow-lg hover:shadow-primary/30 active:scale-[0.97] flex items-center justify-center gap-3 ${
+                  isGenerating ? 'bg-primary/50 cursor-not-allowed' : 'bg-gradient-to-r from-primary to-blue-600 hover:opacity-90'
+                }`}
+              >
+                {isGenerating ? (
+                  <>
+                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                    AI Processing...
+                  </>
+                ) : (
+                  <>Generate Question Paper <Plus size={20} /></>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

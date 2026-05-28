@@ -26,6 +26,7 @@ export interface IQuestionPaper extends Document {
 
 export interface IAssignment extends Document {
     title: string;
+    subject?: string;
     dueDate: Date;
     additionalInstructions?: string;
     status: 'pending' | 'completed' | 'failed';
@@ -57,6 +58,7 @@ const QuestionPaperSchema = new Schema<IQuestionPaper>({
 
 const AssignmentSchema = new Schema<IAssignment>({
     title: { type: String, required: true },
+    subject: { type: String, required: false },
     dueDate: { type: Date, required: true },
     additionalInstructions: { type: String, required: false },
     status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },

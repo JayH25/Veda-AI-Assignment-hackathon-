@@ -9,9 +9,11 @@ export interface QuestionConfig {
 
 interface AssignmentState {
   dueDate: string;
+  subject: string;
   questionConfigs: QuestionConfig[];
   additionalInfo: string;
   setDueDate: (date: string) => void;
+  setSubject: (subject: string) => void;
   addQuestionConfig: () => void;
   removeQuestionConfig: (id: string) => void;
   updateQuestionConfig: (id: string, field: keyof QuestionConfig, value: string | number) => void;
@@ -29,6 +31,7 @@ const QUESTION_TYPES = [
 
 export const useAssignmentStore = create<AssignmentState>((set, get) => ({
   dueDate: '',
+  subject: 'Science',
   // Start with some default rows to match Figma
   questionConfigs: [
     { id: '1', type: 'Multiple Choice Questions', count: 4, marks: 1 },
@@ -37,6 +40,7 @@ export const useAssignmentStore = create<AssignmentState>((set, get) => ({
   additionalInfo: '',
 
   setDueDate: (date) => set({ dueDate: date }),
+  setSubject: (subject) => set({ subject }),
   
   addQuestionConfig: () => set((state) => ({
     questionConfigs: [

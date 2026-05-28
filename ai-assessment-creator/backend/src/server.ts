@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
 // Database Connection
 const connectDB = async () => {
     try {
-        const mongoURI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/ai-assessment-creator';
+        const mongoURI = 'mongodb+srv://jayhirapara2506_db_user:250625062506jay@cluster0.t6rmw9n.mongodb.net/ai-assessment?retryWrites=true&w=majority&appName=Cluster0';
         await mongoose.connect(mongoURI);
         console.log('MongoDB connected successfully');
     } catch (error) {

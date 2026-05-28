@@ -3,14 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const redisUrl = process.env.REDIS_URL || '';
+const redisUrl = 'rediss://default:gQAAAAAAAh0kAAIgcDFiZDQ4NzkwOTA1Yzc0MDRjYTJmMTYxZGIwZDA3YTkyMw@adjusted-escargot-138532.upstash.io:6379';
 
 // We pass the URL directly and force IPv4 to prevent DNS timeout issues
 const redisConnection = new Redis(redisUrl, {
-  tls: {
-    rejectUnauthorized: false
-  },
-  family: 4, // Force IPv4
   maxRetriesPerRequest: null,
 });
 
