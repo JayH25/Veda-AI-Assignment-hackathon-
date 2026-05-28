@@ -17,7 +17,8 @@ export default function AssignmentOutput() {
   useEffect(() => {
     const fetchAssignment = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/assignments/${id}`);
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const response = await axios.get(`${API_URL}/api/assignments/${id}`);
         setAssignment(response.data);
       } catch (err) {
         setError('Failed to load the assignment. Is the backend running?');
