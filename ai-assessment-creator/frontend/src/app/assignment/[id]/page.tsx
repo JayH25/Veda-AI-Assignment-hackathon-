@@ -22,6 +22,7 @@ export default function AssignmentOutput() {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/assignments/${id}`);
         const data = response.data;
+        console.log("Loaded assignment data:", data);
         setAssignment(data);
         
         if (data.status === 'completed' || data.status === 'failed') {
@@ -158,6 +159,19 @@ export default function AssignmentOutput() {
                 <div className="h-6 border-b-2 border-slate-200"></div>
               </div>
             </div>
+
+            {(!assignment.questionPapers || assignment.questionPapers.length === 0 || !assignment.questionPapers[0].sections || assignment.questionPapers[0].sections.length === 0) && (
+              <div className="p-6 bg-yellow-500/10 border border-yellow-500/20 text-yellow-800 rounded-2xl mb-8 print:hidden">
+                <p className="font-bold text-sm">⚠️ No questions found in this assessment.</p>
+                <p className="text-xs mt-1 text-slate-500">
+                  Status: <strong className="text-slate-700">{assignment.status}</strong>. 
+                  The AI generation may have returned an unexpected structure, or failed validation. Here is the raw data:
+                </p>
+                <pre className="mt-4 p-3 bg-slate-50 text-[10px] rounded-lg overflow-x-auto text-slate-600 border border-slate-200 text-left">
+                  {JSON.stringify(assignment, null, 2)}
+                </pre>
+              </div>
+            )}
 
             {/* Dynamic Content Sections */}
             <div className="space-y-12">
