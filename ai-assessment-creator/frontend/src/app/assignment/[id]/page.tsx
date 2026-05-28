@@ -199,11 +199,3 @@ export default function AssignmentOutput() {
     </div>
   );
 }
-            {assignment.generatedContent || assignment.content || "AI Content will appear here."}
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-}
