@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  /* Forcing the light theme from your Figma designs */
+  --background: #f9fafb; 
+  --foreground: #111827;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+/* Notice we completely removed the dark mode @media block! */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
