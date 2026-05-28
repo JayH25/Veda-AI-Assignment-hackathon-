@@ -126,7 +126,7 @@ export default function AssignmentOutput() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                   <p className="text-[10px] uppercase font-black text-slate-400 mb-1">Subject</p>
-                  <p className="text-sm font-bold text-slate-700">English Literature</p>
+                  <p className="text-sm font-bold text-slate-700">{assignment.subject || 'General Knowledge'}</p>
                 </div>
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                   <p className="text-[10px] uppercase font-black text-slate-400 mb-1">Time</p>
