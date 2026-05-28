@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { Download, Loader2, Printer, ChevronLeft, MapPin, Calendar, Clock, Award } from 'lucide-react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/config';
 
 export default function AssignmentOutput() {
   const params = useParams();
@@ -17,8 +18,7 @@ export default function AssignmentOutput() {
   useEffect(() => {
     const fetchAssignment = async () => {
       try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const response = await axios.get(`${API_URL}/api/assignments/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/api/assignments/${id}`);
         setAssignment(response.data);
       } catch (err) {
         setError('Failed to load the assignment. Is the backend running?');

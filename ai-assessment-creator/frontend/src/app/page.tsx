@@ -6,6 +6,7 @@ import { useAssignmentStore } from '@/store/useAssignmentStore';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { API_BASE_URL } from '@/config';
 
 export default function CreateAssignment() {
   const { 
@@ -48,8 +49,7 @@ export default function CreateAssignment() {
         totalQuestions: getTotalQuestions()
       };
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      const response = await axios.post(`${API_URL}/api/assignments`, payload);
+      const response = await axios.post(`${API_BASE_URL}/api/assignments`, payload);
       const assignmentId = response.data.assignmentId; 
       
       router.push(`/assignment/${assignmentId}`);
