@@ -26,7 +26,7 @@ The output MUST match this JSON structure:
       "questions": [
         {
           "text": "The full text of the question",
-          "difficulty": "Easy" or "Medium" or "Challenging",
+          "difficulty": "Easy" or "Moderate" or "Challenging",
           "marks": 5, // number
           "type": "Multiple Choice Questions" or "Short Questions" or "Long Questions" or "Numerical Problems"
         }
@@ -73,7 +73,13 @@ ${referenceNotes}`;
             throw new Error('Invalid response structure from Gemini API');
         }
 
-        return generatedText.trim();
+        let cleanJson = generatedText.trim();
+        // Strip markdown ```json ... ``` wrapper if present
+        if (cleanJson.startsWith('```')) {
+            cleanJson = cleanJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+        }
+
+        return cleanJson.trim();
         
     } catch (error: any) {
         console.error('[Gemini API Error] Failed to generate:', error.message);
@@ -91,7 +97,7 @@ const generateMockPaper = async (formData: any): Promise<string> => {
                     instructions: `Attempt all questions in this section. Each question is worth ${q.marks} marks.`,
                     questions: Array.from({ length: q.count }).map((_, qIdx) => ({
                         text: `Sample generated ${q.type.toLowerCase()} question ${qIdx + 1} regarding ${formData.subject || 'General Knowledge'}.${formData.additionalInstructions ? ` (Instruction: ${formData.additionalInstructions})` : ''}`,
-                        difficulty: qIdx % 3 === 0 ? "Easy" : qIdx % 3 === 1 ? "Medium" : "Challenging",
+                        difficulty: qIdx % 3 === 0 ? "Easy" : qIdx % 3 === 1 ? "Moderate" : "Challenging",
                         marks: q.marks,
                         type: q.type
                     }))
