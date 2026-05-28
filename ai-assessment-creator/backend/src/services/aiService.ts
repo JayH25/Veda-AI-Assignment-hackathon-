@@ -79,13 +79,52 @@ ${referenceNotes}`;
             cleanJson = cleanJson.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
         }
 
-        return cleanJson.trim();
+        const rawJsonObj = JSON.parse(cleanJson.trim());
+        const normalizedObj = normalizePaperData(rawJsonObj);
+        return JSON.stringify(normalizedObj);
         
     } catch (error: any) {
         console.error('[Gemini API Error] Failed to generate:', error.message);
         console.warn('Falling back to dynamic Mock generator.');
         return generateMockPaper(formData);
     }
+};
+
+const normalizePaperData = (parsedData: any): any => {
+    if (!parsedData || !Array.isArray(parsedData.sections)) {
+        return { sections: [] };
+    }
+    
+    return {
+        sections: parsedData.sections.map((section: any) => {
+            const questions = Array.isArray(section.questions) ? section.questions.map((q: any) => {
+                const text = q.text || q.question || q.prompt || 'Untitled Question';
+                
+                let difficulty = q.difficulty || 'Moderate';
+                if (typeof difficulty === 'string') {
+                    const diffLower = difficulty.toLowerCase();
+                    if (diffLower.includes('easy')) difficulty = 'Easy';
+                    else if (diffLower.includes('challeng') || diffLower.includes('hard') || diffLower.includes('difficult')) difficulty = 'Challenging';
+                    else difficulty = 'Moderate';
+                } else {
+                    difficulty = 'Moderate';
+                }
+
+                let marks = Number(q.marks || q.points || 1);
+                if (isNaN(marks)) marks = 1;
+
+                const type = q.type || q.questionType || 'Short Questions';
+
+                return { text, difficulty, marks, type };
+            }) : [];
+
+            return {
+                title: section.title || 'Section A',
+                instructions: section.instructions || '',
+                questions
+            };
+        })
+    };
 };
 
 const generateMockPaper = async (formData: any): Promise<string> => {
