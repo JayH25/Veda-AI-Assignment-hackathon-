@@ -12,7 +12,7 @@ dotenv.config();
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // 1. Create HTTP server AND Socket.io server
 const httpServer = http.createServer(app);
@@ -47,7 +47,7 @@ const connectDB = async () => {
         console.log('MongoDB connected successfully');
     } catch (error) {
         console.error('MongoDB connection error:', error);
-        process.exit(1);
+        console.warn('Server will continue running, but database operations will fail.');
     }
 };
 

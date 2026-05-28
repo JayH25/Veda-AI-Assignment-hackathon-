@@ -16,19 +16,34 @@ export default function AssignmentOutput() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    let intervalId: any;
+
     const fetchAssignment = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/assignments/${id}`);
-        setAssignment(response.data);
+        const data = response.data;
+        setAssignment(data);
+        
+        if (data.status === 'completed' || data.status === 'failed') {
+          setLoading(false);
+          if (intervalId) clearInterval(intervalId);
+        }
       } catch (err) {
         setError('Failed to load the assignment. Is the backend running?');
         console.error(err);
-      } finally {
         setLoading(false);
+        if (intervalId) clearInterval(intervalId);
       }
     };
 
-    if (id) fetchAssignment();
+    if (id) {
+      fetchAssignment();
+      intervalId = setInterval(fetchAssignment, 1500);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [id]);
 
   if (loading) {

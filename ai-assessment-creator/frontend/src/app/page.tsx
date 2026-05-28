@@ -18,9 +18,24 @@ export default function CreateAssignment() {
   } = useAssignmentStore();
   const router = useRouter();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [referenceFile, setReferenceFile] = useState<{ name: string; content: string } | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setReferenceFile({
+        name: file.name,
+        content: event.target?.result as string
+      });
+    };
+    reader.readAsText(file);
+  };
 
   const QUESTION_TYPES = ['Multiple Choice Questions', 'Short Questions', 'Long Questions', 'Numerical Problems'];
- const handleSubmit = async () => {
+  const handleSubmit = async () => {
     // 1. New Check: Make sure they picked a date!
     if (!dueDate) {
       alert("Please select a Due Date before generating!");
@@ -46,7 +61,11 @@ export default function CreateAssignment() {
         })),
         additionalInstructions: additionalInfo,
         totalMarks: getTotalMarks(),
-        totalQuestions: getTotalQuestions()
+        totalQuestions: getTotalQuestions(),
+        referenceFile: referenceFile ? {
+          name: referenceFile.name,
+          content: referenceFile.content
+        } : null
       };
 
       const response = await axios.post(`${API_BASE_URL}/api/assignments`, payload);
@@ -150,6 +169,43 @@ export default function CreateAssignment() {
                 placeholder="Ex: Focus on photosynthesis, include 2 diagram-based questions, keep language simple for 5th grade..."
                 className="w-full bg-secondary/30 border border-border rounded-2xl px-5 py-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground resize-none min-h-[120px] transition-all"
               />
+            </div>
+
+            <div className="space-y-4 mt-6">
+              <label className="block text-sm font-bold text-foreground px-1">Upload Reference Notes</label>
+              {!referenceFile ? (
+                <div className="border-2 border-dashed border-border hover:border-primary/50 rounded-2xl p-6 text-center cursor-pointer transition-all bg-secondary/15 relative group">
+                  <input 
+                    type="file" 
+                    accept=".txt,.md,.json,.csv"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="flex flex-col items-center gap-2">
+                    <UploadCloud className="text-muted-foreground group-hover:text-primary transition-colors" size={32} />
+                    <p className="text-sm font-bold text-foreground">Drag and drop or click to upload</p>
+                    <p className="text-xs text-muted-foreground">Supports .txt, .md, .json, .csv files</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between p-4 bg-secondary/30 border border-border rounded-2xl animate-in fade-in duration-300">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-xs uppercase">
+                      {referenceFile.name.split('.').pop()}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-bold text-foreground truncate max-w-[200px] sm:max-w-xs">{referenceFile.name}</p>
+                      <p className="text-[10px] text-muted-foreground font-semibold">Loaded successfully</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setReferenceFile(null)}
+                    className="p-2 text-muted-foreground hover:text-red-500 rounded-xl hover:bg-secondary transition-all"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
